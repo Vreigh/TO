@@ -12,11 +12,10 @@ public class DataCollector {
 	
 	public double get(){
 		return data[index];
-		
 	}
 	
 	public double getAvarage(){
-		int toRet = 0;
+		double toRet = 0;
 		
 		int itMax;
 		if(all) itMax = max;
@@ -28,10 +27,11 @@ public class DataCollector {
 	}
 	
 	public void push(double x){
-		data[index] = x;
 		if(++index == max){
 			index = 0;
 			all = true;
 		}
+		data[index] = x;
+		
 	}
 }

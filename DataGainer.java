@@ -1,29 +1,55 @@
+import java.util.ArrayList;
 
-public abstract class DataGainer implements Runnable  {
+public abstract class DataGainer implements Runnable, Datagetable  {
 
-	protected DataCollector data;
+	protected ArrayList<DataCollector> data;
 	private String name;
 	private Thread t = null;
 	
-	public DataGainer(int max, String name){
-		data = new DataCollector(max);
+	public DataGainer(ArrayList<Integer> sizes, String name){
+		data = new ArrayList<DataCollector>();
+		for(int n : sizes){
+			data.add(new DataCollector(n));
+		}
 		this.name = name;
 	}
 	
-	public double getData(){
-		synchronized(data){
-			return data.get(); 
+	public ArrayList<Double> getAllData(){
+		ArrayList<Double> result = new ArrayList<Double>();
+		
+		for(DataCollector col : data){
+			synchronized(col){
+				result.add(col.get());
+			}
 		}
+		
+		return result;
 	}
 	
-	public double getAvarageData(){
-		synchronized(data){
-			return data.getAvarage();
+	public ArrayList<Double> getAllAvarageData(){
+		ArrayList<Double> result = new ArrayList<Double>();
+		
+		for(DataCollector col : data){
+			synchronized(col){
+				result.add(col.getAvarage());
+			}
 		}
+		
+		return result;
 		
 	}
 	
-	public abstract void run();
+	public double getData(int i){
+		synchronized(data.get(i)){
+			return data.get(i).get();
+		}
+	}
+	
+	public double getAvarageData(int i){
+		synchronized(data.get(i)){
+			return data.get(i).getAvarage();
+		}
+	}
 	
 	public void start(){
 		System.out.println("Starting " +  name );
